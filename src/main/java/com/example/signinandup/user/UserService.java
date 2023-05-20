@@ -1,7 +1,7 @@
 package com.example.signinandup.user;
 
-import com.example.signinandup.token.ConfirmationToken;
-import com.example.signinandup.token.ConfirmationTokenService;
+import com.example.signinandup.registration.token.ConfirmationToken;
+import com.example.signinandup.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
