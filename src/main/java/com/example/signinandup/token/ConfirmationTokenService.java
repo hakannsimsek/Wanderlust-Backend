@@ -1,4 +1,4 @@
-package com.example.signinandup.registration.token;
+package com.example.signinandup.token;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

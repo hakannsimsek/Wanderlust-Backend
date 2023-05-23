@@ -1,4 +1,4 @@
-package com.example.signinandup.registration.token;
+package com.example.signinandup.token;
 
 import com.example.signinandup.user.User;
 import jakarta.persistence.*;

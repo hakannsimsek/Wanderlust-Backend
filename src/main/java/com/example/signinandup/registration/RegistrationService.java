@@ -1,10 +1,9 @@
 package com.example.signinandup.registration;
 
 import com.example.signinandup.email.EmailSender;
-import com.example.signinandup.registration.token.ConfirmationToken;
-import com.example.signinandup.registration.token.ConfirmationTokenService;
+import com.example.signinandup.token.ConfirmationToken;
+import com.example.signinandup.token.ConfirmationTokenService;
 import com.example.signinandup.user.User;
-import com.example.signinandup.user.UserRole;
 import com.example.signinandup.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,8 +32,7 @@ public class RegistrationService {
                         request.getFirstName(),
                         request.getLastName(),
                         request.getEmail(),
-                        request.getPassword(),
-                        UserRole.USER
+                        request.getPassword()
                 )
         );
 
