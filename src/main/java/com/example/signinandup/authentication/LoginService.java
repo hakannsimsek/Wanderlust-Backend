@@ -1,7 +1,6 @@
 package com.example.signinandup.authentication;
 
 import com.example.signinandup.config.JwtService;
-import com.example.signinandup.user.User;
 import com.example.signinandup.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,22 +10,22 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class LoginService {
     private final UserRepository repository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse authenticate(RegisterRequest registerRequest) {
+    public LoginResponse authenticate(LoginRequest loginRequest) {
         authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(
-                  registerRequest.getEmail(),
-                  registerRequest.getPassword()
+                  loginRequest.getUsername(),
+                  loginRequest.getPassword()
           )
         );
-        var user = repository.findByEmail(registerRequest.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException(registerRequest.getEmail() + " not found"));
+        var user = repository.findByUsername(loginRequest.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException(loginRequest.getUsername() + " not found"));
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
+        return LoginResponse.builder()
                 .token(jwtToken)
                 .build();
     }
