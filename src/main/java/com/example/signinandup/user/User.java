@@ -6,17 +6,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@ToString
 @Table(name = "Users")
 public class User implements UserDetails {
 
@@ -39,20 +35,29 @@ public class User implements UserDetails {
     private UserRole userRole = UserRole.USER;
     private Boolean locked = false;
     private Boolean enabled = false;
+    private String username;
+    //TODO: ProfilPhoto
+    private String profilPhoto;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="UserFriendship",
-            joinColumns={@JoinColumn(name="UserId")},
-            inverseJoinColumns={@JoinColumn(name="FriendId")})
-    private Set<User> friends = new HashSet<User>();
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "UserFriendship",
+            joinColumns = {@JoinColumn(name = "UserId")},
+            inverseJoinColumns = {@JoinColumn(name = "FriendId")})
+    private List<User> friends = new ArrayList<>();
 
-    @ManyToMany(mappedBy="friends")
-    private Set<User> followed = new HashSet<User>();
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "friends")
+    private List<User> followed = new ArrayList<>();
 
+    public void addFriend(User friend){
+        if(friends==null)
+            friends = new ArrayList<>();
+        friends.add(friend);
+    }
 
-    public User(String name, String surname, String email, String password) {
+    public User(String name, String surname,String username, String email, String password) {
         this.name = name;
         this.surname = surname;
+        this.username = username;
         this.email = email;
         this.password = password;
     }
@@ -70,7 +75,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
@@ -91,5 +96,14 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                '}';
     }
 }

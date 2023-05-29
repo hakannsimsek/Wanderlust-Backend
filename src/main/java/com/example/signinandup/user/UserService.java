@@ -10,12 +10,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
-
     private final String USER_NOT_FOUND = "User with email %s not found";
     private final String EMAIL_ALREADY_TAKEN = "Email address %s is already taken";
     private final BCryptPasswordEncoder passwordEncoder;
@@ -34,15 +34,11 @@ public class UserService implements UserDetailsService {
 
         if (userExist){
             //TODO: if email not confirmed, send confirmation email
-
             throw new IllegalStateException(String.format(EMAIL_ALREADY_TAKEN, user.getEmail()));
         }
 
-
         String encodedPassword = passwordEncoder.encode(user.getPassword());
-
         user.setPassword(encodedPassword);
-
         repository.save(user);
 
         String token = UUID.randomUUID().toString();
@@ -53,10 +49,7 @@ public class UserService implements UserDetailsService {
                 LocalDateTime.now().plusMinutes(15),
                 user
         );
-
         confirmationTokenService.SaveConfirmationToken(confirmationToken);
-
-        //TODO: send email
 
         return token;
     }
@@ -64,4 +57,16 @@ public class UserService implements UserDetailsService {
     public int enableUser(String email) {
         return repository.enableUser(email);
     }
+
+    //TODO: addProfilPhoto
+    public int addProfilPhoto(byte[] email) {
+        return 0;
+    }
+
+    public List<User> getFriends(long userId){
+        User user = repository.findById(userId).orElseThrow();
+        return user.getFriends();
+    }
+
+
 }
